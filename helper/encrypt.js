@@ -6,13 +6,18 @@ const encryption = {
          if(!password)
             return res.msg = "Please give password";
 
+            console.log("password ", password)
+   
          const salt = await createSalt();
+        
          const hashPassword = await hash(password, salt);
 
          return hashPassword;
 
      }
 }
+
+module.exports = encryption
 
 
 const createSalt =async() => {

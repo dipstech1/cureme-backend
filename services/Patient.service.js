@@ -4,36 +4,40 @@ const encryptHelper = require('../helper/encrypt')
 
 const patientService = {
 
-    registerPatient : async() => {
+    registerPatient : async({email, password,patientname}) => {
        const response = {}
-       
        try {
         const patient = await patientModel.findOne({email});
+        console.log("Email ", patientname)
 
         if(patient){
           return response.msg = "Patient is already registered. Please login"
         }
  
-        patient = new patient({
+        let npatient = new patientModel({
             email, 
             password,
             patientname
         });
+
+        const hashPass = await encryptHelper.encPassword(password);
+        npatient['password'] = hashPass;
+        console.log('npatient ', npatient)
+
+
+       let newpatient = await npatient.save();
  
-        const hashPass = await encryptHelper(password);
-        patient['password'] = hashPass;
- 
-        let patientIns = await patient.save();
- 
-        if(patientIns.id){
+        if(npatient.id){
             response.msg = "Patient registered",
-            response.data = patientIns.id
+            response.data = newpatient.id
         }
         else{
             response.msg = "Patient not registered",
-            response.data = patientIns.id
+            response.data = ""
         }
+        return response
        } catch (error) {
+           console.log(error)
            throw new Error(error)
        }
            
