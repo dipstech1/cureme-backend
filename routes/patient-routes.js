@@ -5,4 +5,5 @@ const router = express.Router();
 
 router.post("/reg", patientController.registerPatient);
 
+
 module.exports = router;

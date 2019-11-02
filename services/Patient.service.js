@@ -1,6 +1,7 @@
 const patientModel = require('../db/model/Patient');
 const encryptHelper = require('../helper/encrypt')
-
+const emailSend = require('../utils/Email');
+const jwtHandle = require('../helper/jwt')
 
 const patientService = {
 
@@ -22,7 +23,6 @@ const patientService = {
 
         const hashPass = await encryptHelper.encPassword(password);
         npatient['password'] = hashPass;
-        console.log('npatient ', npatient)
 
 
        let newpatient = await npatient.save();
@@ -30,6 +30,16 @@ const patientService = {
         if(npatient.id){
             response.msg = "Patient registered",
             response.data = newpatient.id
+
+            let emailToken = await jwtHandle.createTokenForEmail(newpatient)
+            let sendEmail = {
+                to : newpatient.email,
+                emailToken
+            }
+
+            let emailSendSucc = await emailSend(sendEmail)
+            console.log('emailSendSucc ', emailSendSucc)
+
         }
         else{
             response.msg = "Patient not registered",
