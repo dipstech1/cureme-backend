@@ -14,6 +14,20 @@ const encryption = {
 
          return hashPassword;
 
+     },
+
+     decPassword : async(dbpassword,userpassword) => {
+         let res = {};
+         if(!userpassword){
+            res.msg = "Please give password";
+            res.isSame = false;
+            return res
+         }
+
+         let isSame = await decrypt(dbpassword,userpassword);
+         res.isSame = isSame;
+         return res;
+        
      }
 }
 
@@ -28,4 +42,9 @@ const createSalt =async() => {
 const hash = async(text, salt) => {
     const hashText = await bcrypt.hash(text, salt);
     return hashText;
+}
+
+const decrypt = async(dbpassword,userpassword) =>{
+    let isSame = await bcrypt.compare(userpassword, dbpassword);
+    return isSame
 }

@@ -17,6 +17,20 @@ const tokenhandle = {
        return token
     },
 
+    createTokenForLogin : async(user) => {
+        let token =await jwt.sign(
+            {
+                user: user.id
+            },
+            process.env.JWT_LOGIN,
+            {
+                expiresIn : '1d'
+            }
+        )
+    
+       return token
+    },
+
     jwtVerify :  async(token) => {
     let veruify = await jwt.verify(
           token,

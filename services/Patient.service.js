@@ -52,6 +52,31 @@ const patientService = {
        }
            
 
+    },
+
+    loginPatient : async({email , password}) => {
+        let response = {}
+        try {
+            let patient = await patientModel.findOne({email});
+            if(!patient){
+                response.message = "No patient details found";
+                return response;
+            }
+           let canLogin = await encryptHelper.decPassword(patient.password, password); 
+           console.log("canLogin ", canLogin)
+           if(!canLogin.isSame){
+            response.message = "No patient details found";
+            return response;
+           }      
+           
+           let token = await jwtHandle.createTokenForLogin(patient);
+
+           response.message = "Login success";
+           response.token = token;
+           return response;
+        } catch (error) {
+            
+        }
     }
 }
 

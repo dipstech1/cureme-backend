@@ -15,6 +15,16 @@ const patientController = {
             
         }
         
+    },
+
+    loginPatient : async(req, res) => {
+        try {
+            const {email,password} = req.body;
+           let loginData =  await patientService.loginPatient(req.body)
+           res.json({data:loginData})
+        } catch (error) {
+            
+        }
     }
 }
 
