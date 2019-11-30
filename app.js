@@ -22,8 +22,10 @@ app.get("/confirmation/:token", async(req, res) => {
    }
 })
 
-app.use("/api", patientRoutes)
+app.use("/api", patientRoutes);
 
-app.listen(5000, () => {
+let port = process.env.PORT || 5000
+
+app.listen(port, () => {
     console.log("Server started")
 })
