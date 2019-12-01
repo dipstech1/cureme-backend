@@ -6,7 +6,6 @@ const patientController = {
 
         try {
             const {email, password,patientname} = req.body;
-            console.log("req.body ", req.body)
 
         let newPatient = await patientService.registerPatient(req.body);
 
